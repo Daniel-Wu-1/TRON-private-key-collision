@@ -41,11 +41,16 @@ def private_key_to_tron_address(private_key):
     # 生成 Base58Check 编码
     checksum = sha256(sha256(tron_address_hex).digest()).digest()[:4]
     base58_address = base58.b58encode(tron_address_hex + checksum)
-    return base58_address.decode()
+    return base58_address.decode(), tron_address_hex.hex()
+
+# 将 Base58 地址转换为十六进制地址
+def base58_to_hex_address(base58_address):
+    decoded = base58.b58decode(base58_address)
+    return decoded[:-4].hex()  # 去掉最后 4 字节的校验和
 
 # 查询地址资产（异步）
-async def query_tron_address_balance(session, address):
-    payload = {"address": address}
+async def query_tron_address_balance(session, hex_address):
+    payload = {"address": hex_address, "visible": False}
     headers = {"Content-Type": "application/json"}
     try:
         async with session.post(TRON_API_URL, json=payload, headers=headers, timeout=10) as response:
@@ -86,8 +91,8 @@ def save_non_zero_address(private_key, address, trx_balance, tokens, trc20_token
 # 主任务：生成私钥、地址并查询
 async def process_key(index, session):
     private_key = generate_private_key()
-    tron_address = private_key_to_tron_address(private_key)
-    trx_balance, tokens, trc20_tokens = await query_tron_address_balance(session, tron_address)
+    tron_address, hex_address = private_key_to_tron_address(private_key)
+    trx_balance, tokens, trc20_tokens = await query_tron_address_balance(session, hex_address)
 
     # 实时显示查询信息
     write_log(f"[{index}] Address: {tron_address}, Private Key: {private_key.hex()}, TRX: {trx_balance}")
@@ -115,4 +120,7 @@ async def main():
                 await asyncio.sleep(1 - elapsed_time)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("\n程序已停止。")
