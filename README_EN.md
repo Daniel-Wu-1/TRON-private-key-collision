@@ -26,25 +26,30 @@
 ```
 Mnemonic_collision/
 ├── 📦 src/                           # Core Engine
-│   ├── jiutong.py                    # Main collision program
-│   └── requirements.txt              # Core dependencies
-├── 🌐 web-monitor/                   # Web monitoring interface
-│   ├── web_monitor.py               # Flask monitoring service
-│   ├── templates/                   # HTML templates
-│   ├── static/                      # Static resources
-│   ├── install-web-monitor.sh       # Web installation script
-│   └── web-requirements.txt         # Web dependencies
-├── 🚀 deployment/                    # Automated deployment
-│   ├── install-rocky-minimal.sh     # Rocky Linux installation script
-│   └── ROCKY_LINUX_QUICK_START.md   # Deployment guide
-├── 💼 TRON私钥碰撞/                   # Standalone version
-│   ├── jiutong.py                   # Program file
-│   ├── jiutong.spec                 # PyInstaller configuration
-│   └── dist/                        # Windows executable version
-│       ├── jiutong.exe              # Compiled executable file
-│       ├── logs.txt                 # Runtime log file
-│       └── non_zero_addresses.txt   # Found addresses with assets (generated on collision success)
-└── README.md                        # Project documentation
+│   ├── jiutong.py                    # Main collision program (async high-performance)
+│   ├── test_api.py                   # TronGrid API testing tool
+│   ├── requirements.txt              # Python dependencies
+│   ├── logs.txt                      # Runtime logs (auto-generated)
+│   └── non_zero_addresses.txt        # Found addresses with assets (generated on success)
+├── 🌐 web-monitor/                   # Web Monitoring Interface
+│   ├── web_monitor.py                # Flask monitoring service (with WebSocket)
+│   ├── templates/                    # HTML templates
+│   │   └── index.html                # Responsive monitoring dashboard
+│   ├── static/                       # Static assets (CSS/JS)
+│   ├── install-web-monitor.sh        # Web monitor installation script
+│   ├── web-requirements.txt          # Web service dependencies
+│   ├── fix-sudo-permissions.sh       # Permission fix script
+│   └── WEB_MONITOR_GUIDE.md          # Web monitoring guide
+├── 🚀 deployment/                    # Automated Deployment
+│   ├── install-rocky-minimal.sh      # Rocky Linux minimal installation script
+│   └── ROCKY_LINUX_QUICK_START.md    # Quick deployment guide
+├── 💼 TRON私钥碰撞/                   # Windows Standalone Version (Optional)
+│   ├── jiutong.py                    # Standalone program copy
+│   ├── jiutong.spec                  # PyInstaller packaging config
+│   └── dist/                         # Compiled executables
+│       └── jiutong.exe               # Windows executable
+├── README.md                         # Project documentation (Chinese)
+└── README_EN.md                      # Project documentation (English)
 ```
 
 ## 🚀 Features
@@ -123,7 +128,8 @@ sudo systemctl start tron-web-monitor
 
 #### Windows Users
 
-```bash
+**Method 1: Python Execution (Recommended)**
+```powershell
 # 1. Install Python dependencies
 pip install -r src/requirements.txt
 
@@ -132,12 +138,14 @@ cd src
 python jiutong.py
 ```
 
-Or use compiled version directly:
-```bash
-# Run compiled executable
-cd TRON私钥碰撞/dist
-./jiutong.exe
+**Method 2: Use Compiled Version (if available)**
+```powershell
+# Run compiled executable directly
+cd TRON私钥碰撞\dist
+jiutong.exe
 ```
+
+> 💡 **Tip**: To compile your own exe, refer to `TRON私钥碰撞/jiutong.spec` and use PyInstaller
 
 #### Linux Users
 
@@ -174,28 +182,35 @@ docker run -d --name tron-collision \
 
 ### Basic Usage
 
-1. **Start Program**
+1. **Test API Connection (Recommended before first run)**
+   ```bash
+   # Test if TronGrid API is accessible
+   cd src
+   python test_api.py
+   ```
+
+2. **Start Program**
    ```bash
    # Direct run
    python src/jiutong.py
    
-   # Or use system service
+   # Or use system service (Linux)
    sudo systemctl start tron-collision
    ```
 
-2. **View Logs**
+3. **View Logs**
    ```bash
    # View runtime logs
-   tail -f logs.txt
+   tail -f src/logs.txt
    
-   # View system service logs
+   # View system service logs (Linux)
    sudo journalctl -u tron-collision -f
    ```
 
-3. **Check Results**
+4. **Check Results**
    ```bash
    # View found addresses with assets
-   cat non_zero_addresses.txt
+   cat src/non_zero_addresses.txt
    ```
 
 ### Web Monitoring Usage
@@ -211,11 +226,22 @@ Access `http://your-server-ip:5168` to use web interface:
 
 #### Performance Tuning
 
+Configurable parameters in `src/jiutong.py`:
+
 ```python
-# Modify configuration in src/jiutong.py
-API_CALL_LIMIT = 10      # API calls per second (not recommended to exceed 10)
-LOG_LIMIT = 2000         # Log retention count
+# API Configuration
+TRON_API_URL = "https://api.trongrid.io/wallet/getaccount"  # TronGrid API endpoint
+API_CALL_LIMIT = 10      # Maximum API calls per second (default 10, respects API limits)
+
+# Logging Configuration
+LOG_LIMIT = 2000         # Maximum entries retained in log queue
+LOG_FILE = "logs.txt"    # Log file path
+NON_ZERO_LOG_FILE = "non_zero_addresses.txt"  # Found addresses save file
 ```
+
+> ⚠️ **Warning**: 
+> - `API_CALL_LIMIT` should not exceed 10, or you may trigger TronGrid API rate limiting (403 error)
+> - Increasing `LOG_LIMIT` will consume more memory
 
 #### Multi-instance Running
 
@@ -499,4 +525,4 @@ This project is released under the MIT License - see the [LICENSE](LICENSE) file
 
 **Good luck! 🍀**
 
-*Last Updated: 2024, optimized for the latest project structure and features*
+*Last Updated: November 16, 2024, fully optimized for the latest project structure and features*

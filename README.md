@@ -25,26 +25,31 @@
 
 ```
 Mnemonic_collision/
-├── 📦 src/                           # 核心
-│   ├── jiutong.py                    # 主碰撞程序
-│   └── requirements.txt              # 核心依赖
+├── 📦 src/                           # 核心引擎
+│   ├── jiutong.py                    # 主碰撞程序（异步高性能版本）
+│   ├── test_api.py                   # TronGrid API测试工具
+│   ├── requirements.txt              # Python依赖包
+│   ├── logs.txt                      # 运行日志（自动生成）
+│   └── non_zero_addresses.txt        # 发现的有资产地址（碰撞成功时生成）
 ├── 🌐 web-monitor/                   # Web监控界面
-│   ├── web_monitor.py               # Flask监控服务
-│   ├── templates/                   # HTML模板
-│   ├── static/                      # 静态资源
-│   ├── install-web-monitor.sh       # Web安装脚本
-│   └── web-requirements.txt         # Web依赖
+│   ├── web_monitor.py                # Flask监控服务（含WebSocket）
+│   ├── templates/                    # HTML模板
+│   │   └── index.html                # 响应式监控界面
+│   ├── static/                       # 静态资源（CSS/JS）
+│   ├── install-web-monitor.sh        # Web监控一键安装脚本
+│   ├── web-requirements.txt          # Web服务依赖
+│   ├── fix-sudo-permissions.sh       # 权限修复脚本
+│   └── WEB_MONITOR_GUIDE.md          # Web监控使用指南
 ├── 🚀 deployment/                    # 自动化部署
-│   ├── install-rocky-minimal.sh     # Rocky Linux安装脚本
-│   └── ROCKY_LINUX_QUICK_START.md   # 部署指南
-├── 💼 TRON私钥碰撞/                   # 独立版本
-│   ├── jiutong.py                   # 程序文件
-│   ├── jiutong.spec                 # PyInstaller配置
-│   └── dist/                        # Windows可执行版本
-│       ├── jiutong.exe              # 编译好的可执行文件
-│       ├── logs.txt                 # 运行日志文件
-│       └── non_zero_addresses.txt   # 发现的有资产地址（碰撞成功时生成）
-└── README.md                        # 项目文档
+│   ├── install-rocky-minimal.sh      # Rocky Linux极简安装脚本
+│   └── ROCKY_LINUX_QUICK_START.md    # 部署快速指南
+├── 💼 TRON私钥碰撞/                   # Windows独立版本（可选）
+│   ├── jiutong.py                    # 独立程序副本
+│   ├── jiutong.spec                  # PyInstaller打包配置
+│   └── dist/                         # 编译后的可执行文件
+│       └── jiutong.exe               # Windows可执行程序
+├── README.md                         # 项目文档（中文）
+└── README_EN.md                      # 项目文档（英文）
 ```
 
 ## 🚀 功能特性
@@ -123,7 +128,8 @@ sudo systemctl start tron-web-monitor
 
 #### Windows 用户
 
-```bash
+**方式1：Python运行（推荐）**
+```powershell
 # 1. 安装Python依赖
 pip install -r src/requirements.txt
 
@@ -132,12 +138,14 @@ cd src
 python jiutong.py
 ```
 
-或直接使用编译版本：
-```bash
-# 运行编译好的可执行文件
-cd TRON私钥碰撞/dist
-./jiutong.exe
+**方式2：使用编译版本（如果已有）**
+```powershell
+# 直接运行编译好的可执行文件
+cd TRON私钥碰撞\dist
+jiutong.exe
 ```
+
+> 💡 **提示**: 如需自己编译exe，参考 `TRON私钥碰撞/jiutong.spec` 使用PyInstaller打包
 
 #### Linux 用户
 
@@ -174,28 +182,35 @@ docker run -d --name tron-collision \
 
 ### 基础使用
 
-1. **启动程序**
+1. **测试API连接（首次运行前推荐）**
+   ```bash
+   # 测试TronGrid API是否可访问
+   cd src
+   python test_api.py
+   ```
+
+2. **启动程序**
    ```bash
    # 直接运行
    python src/jiutong.py
    
-   # 或使用系统服务
+   # 或使用系统服务（Linux）
    sudo systemctl start tron-collision
    ```
 
-2. **查看日志**
+3. **查看日志**
    ```bash
    # 查看运行日志
-   tail -f logs.txt
+   tail -f src/logs.txt
    
-   # 查看系统服务日志
+   # 查看系统服务日志（Linux）
    sudo journalctl -u tron-collision -f
    ```
 
-3. **检查结果**
+4. **检查结果**
    ```bash
    # 查看发现的有资产地址
-   cat non_zero_addresses.txt
+   cat src/non_zero_addresses.txt
    ```
 
 ### Web监控使用
@@ -211,11 +226,22 @@ docker run -d --name tron-collision \
 
 #### 性能调优
 
+在 `src/jiutong.py` 中可调整的配置项：
+
 ```python
-# 修改 src/jiutong.py 中的配置
-API_CALL_LIMIT = 10      # 每秒API调用数（不建议超过10）
-LOG_LIMIT = 2000         # 日志保留条数
+# API配置
+TRON_API_URL = "https://api.trongrid.io/wallet/getaccount"  # TronGrid API端点
+API_CALL_LIMIT = 10      # 每秒最大API调用次数（默认10，遵守API限制）
+
+# 日志配置
+LOG_LIMIT = 2000         # 日志队列保留的最大条目数
+LOG_FILE = "logs.txt"    # 日志文件路径
+NON_ZERO_LOG_FILE = "non_zero_addresses.txt"  # 发现地址保存文件
 ```
+
+> ⚠️ **警告**: 
+> - `API_CALL_LIMIT` 不建议超过10，否则可能触发TronGrid API限流（403错误）
+> - 增大 `LOG_LIMIT` 会占用更多内存
 
 #### 多实例运行
 
@@ -489,4 +515,4 @@ git commit -m "feat: add your feature"
 
 **祝你好运！🍀**
 
-*最后更新: 2025年9月29日，已针对最新的项目结构和功能进行优化*
+*最后更新: 2024年11月16日，已针对最新的项目结构和功能进行全面优化*
