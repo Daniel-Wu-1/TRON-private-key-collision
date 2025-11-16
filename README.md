@@ -26,7 +26,7 @@
 ```
 Mnemonic_collision/
 ├── 📦 src/                           # 核心引擎
-│   ├── jiutong.py                    # 主碰撞程序（异步高性能版本）
+│   ├── tron.py                    # 主碰撞程序（异步高性能版本）
 │   ├── test_api.py                   # TronGrid API测试工具
 │   ├── requirements.txt              # Python依赖包
 │   ├── logs.txt                      # 运行日志（自动生成）
@@ -44,10 +44,10 @@ Mnemonic_collision/
 │   ├── install-rocky-minimal.sh      # Rocky Linux极简安装脚本
 │   └── ROCKY_LINUX_QUICK_START.md    # 部署快速指南
 ├── 💼 TRON私钥碰撞/                   # Windows独立版本（可选）
-│   ├── jiutong.py                    # 独立程序副本
-│   ├── jiutong.spec                  # PyInstaller打包配置
+│   ├── tron.py                    # 独立程序副本
+│   ├── tron.spec                  # PyInstaller打包配置
 │   └── dist/                         # 编译后的可执行文件
-│       └── jiutong.exe               # Windows可执行程序
+│       └── tron.exe               # Windows可执行程序
 ├── README.md                         # 项目文档（中文）
 └── README_EN.md                      # 项目文档（英文）
 ```
@@ -135,17 +135,17 @@ pip install -r src/requirements.txt
 
 # 2. 运行程序
 cd src
-python jiutong.py
+python tron.py
 ```
 
 **方式2：使用编译版本（如果已有）**
 ```powershell
 # 直接运行编译好的可执行文件
 cd TRON私钥碰撞\dist
-jiutong.exe
+tron.exe
 ```
 
-> 💡 **提示**: 如需自己编译exe，参考 `TRON私钥碰撞/jiutong.spec` 使用PyInstaller打包
+> 💡 **提示**: 如需自己编译exe，参考 `TRON私钥碰撞/tron.spec` 使用PyInstaller打包
 
 #### Linux 用户
 
@@ -162,7 +162,7 @@ pip install -r src/requirements.txt
 
 # 4. 运行程序
 cd src
-python jiutong.py
+python tron.py
 ```
 
 ### 方法三：Docker部署（即将支持）
@@ -192,7 +192,7 @@ docker run -d --name tron-collision \
 2. **启动程序**
    ```bash
    # 直接运行
-   python src/jiutong.py
+   python src/tron.py
    
    # 或使用系统服务（Linux）
    sudo systemctl start tron-collision
@@ -226,7 +226,7 @@ docker run -d --name tron-collision \
 
 #### 性能调优
 
-在 `src/jiutong.py` 中可调整的配置项：
+在 `src/tron.py` 中可调整的配置项：
 
 ```python
 # API配置
@@ -328,7 +328,7 @@ sudo systemctl status tron-collision
 sudo journalctl -u tron-collision --no-pager
 
 # 手动测试程序
-sudo -u tron python3 /opt/tron-collision/jiutong.py
+sudo -u tron python3 /opt/tron-collision/tron.py
 ```
 
 #### 3. Web界面无法访问
@@ -409,16 +409,16 @@ sudo journalctl -u tron-collision | grep -i "suspicious\|error"
 
 ```bash
 # CPU使用率
-top -p $(pgrep -f jiutong.py)
+top -p $(pgrep -f tron.py)
 
 # 内存使用
-ps aux | grep jiutong.py
+ps aux | grep tron.py
 
 # 网络连接
 ss -tlnp | grep python
 
 # 磁盘IO
-iotop -p $(pgrep -f jiutong.py)
+iotop -p $(pgrep -f tron.py)
 ```
 
 ### 业务监控

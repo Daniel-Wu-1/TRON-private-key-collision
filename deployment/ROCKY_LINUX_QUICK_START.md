@@ -80,7 +80,7 @@ Mnemonic_collision/                 # 项目根目录 (运行脚本的位置)
 │   ├── install-rocky-minimal.sh   # 极简安装脚本
 │   └── ROCKY_LINUX_QUICK_START.md # 本文档  
 ├── src/                           # 核心源码 (新组织结构)
-│   ├── jiutong.py                # 主程序
+│   ├── tron.py                # 主程序
 │   └── requirements.txt          # 依赖文件
 └── web-monitor/                   # Web监控界面
     ├── web_monitor.py            # Web服务
@@ -290,16 +290,16 @@ sudo journalctl -u tron-collision -p err --since today
 ### 性能监控
 ```bash
 # 查看进程信息
-ps aux | grep jiutong
+ps aux | grep tron
 
 # 查看内存使用
-sudo pmap $(pgrep -f jiutong)
+sudo pmap $(pgrep -f tron)
 
 # 查看网络连接
 sudo ss -tlnp | grep python
 
 # 查看CPU使用率
-top -p $(pgrep -f jiutong)
+top -p $(pgrep -f tron)
 ```
 
 ## 🛠️ 故障排除
@@ -318,7 +318,7 @@ sudo journalctl -u tron-collision --since "5 minutes ago"
 ls -la /opt/tron-collision/
 
 # 手动测试程序
-sudo -u tron /opt/tron-collision/venv/bin/python /opt/tron-collision/jiutong.py
+sudo -u tron /opt/tron-collision/venv/bin/python /opt/tron-collision/tron.py
 ```
 
 #### 2. 网络连接问题

@@ -95,7 +95,7 @@ class TronMonitor:
         """获取进程信息"""
         try:
             for proc in psutil.process_iter(['pid', 'name', 'cmdline', 'memory_info', 'cpu_percent']):
-                if 'jiutong.py' in str(proc.info['cmdline']):
+                if 'tron.py' in str(proc.info['cmdline']):
                     return {
                         'pid': proc.info['pid'],
                         'memory_mb': proc.info['memory_info'].rss / 1024 / 1024,

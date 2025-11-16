@@ -26,7 +26,7 @@
 ```
 Mnemonic_collision/
 ├── 📦 src/                           # Core Engine
-│   ├── jiutong.py                    # Main collision program (async high-performance)
+│   ├── tron.py                    # Main collision program (async high-performance)
 │   ├── test_api.py                   # TronGrid API testing tool
 │   ├── requirements.txt              # Python dependencies
 │   ├── logs.txt                      # Runtime logs (auto-generated)
@@ -44,10 +44,10 @@ Mnemonic_collision/
 │   ├── install-rocky-minimal.sh      # Rocky Linux minimal installation script
 │   └── ROCKY_LINUX_QUICK_START.md    # Quick deployment guide
 ├── 💼 TRON私钥碰撞/                   # Windows Standalone Version (Optional)
-│   ├── jiutong.py                    # Standalone program copy
-│   ├── jiutong.spec                  # PyInstaller packaging config
+│   ├── tron.py                    # Standalone program copy
+│   ├── tron.spec                  # PyInstaller packaging config
 │   └── dist/                         # Compiled executables
-│       └── jiutong.exe               # Windows executable
+│       └── tron.exe               # Windows executable
 ├── README.md                         # Project documentation (Chinese)
 └── README_EN.md                      # Project documentation (English)
 ```
@@ -135,17 +135,17 @@ pip install -r src/requirements.txt
 
 # 2. Run program
 cd src
-python jiutong.py
+python tron.py
 ```
 
 **Method 2: Use Compiled Version (if available)**
 ```powershell
 # Run compiled executable directly
 cd TRON私钥碰撞\dist
-jiutong.exe
+tron.exe
 ```
 
-> 💡 **Tip**: To compile your own exe, refer to `TRON私钥碰撞/jiutong.spec` and use PyInstaller
+> 💡 **Tip**: To compile your own exe, refer to `TRON私钥碰撞/tron.spec` and use PyInstaller
 
 #### Linux Users
 
@@ -162,7 +162,7 @@ pip install -r src/requirements.txt
 
 # 4. Run program
 cd src
-python jiutong.py
+python tron.py
 ```
 
 ### Method 3: Docker Deployment (Coming Soon)
@@ -192,7 +192,7 @@ docker run -d --name tron-collision \
 2. **Start Program**
    ```bash
    # Direct run
-   python src/jiutong.py
+   python src/tron.py
    
    # Or use system service (Linux)
    sudo systemctl start tron-collision
@@ -226,7 +226,7 @@ Access `http://your-server-ip:5168` to use web interface:
 
 #### Performance Tuning
 
-Configurable parameters in `src/jiutong.py`:
+Configurable parameters in `src/tron.py`:
 
 ```python
 # API Configuration
@@ -328,7 +328,7 @@ sudo systemctl status tron-collision
 sudo journalctl -u tron-collision --no-pager
 
 # Manual test program
-sudo -u tron python3 /opt/tron-collision/jiutong.py
+sudo -u tron python3 /opt/tron-collision/tron.py
 ```
 
 #### 3. Web Interface Inaccessible
@@ -409,16 +409,16 @@ sudo journalctl -u tron-collision | grep -i "suspicious\|error"
 
 ```bash
 # CPU usage
-top -p $(pgrep -f jiutong.py)
+top -p $(pgrep -f tron.py)
 
 # Memory usage
-ps aux | grep jiutong.py
+ps aux | grep tron.py
 
 # Network connections
 ss -tlnp | grep python
 
 # Disk IO
-iotop -p $(pgrep -f jiutong.py)
+iotop -p $(pgrep -f tron.py)
 ```
 
 ### Business Monitoring

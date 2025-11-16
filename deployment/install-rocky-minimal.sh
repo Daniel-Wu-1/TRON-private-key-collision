@@ -186,9 +186,9 @@ echo "📂 项目根目录: $PROJECT_ROOT"
 echo "📂 源码目录: $SRC_PATH"
 
 # 检查必要文件
-if [ ! -f "$SRC_PATH/jiutong.py" ] || [ ! -f "$SRC_PATH/requirements.txt" ]; then
+if [ ! -f "$SRC_PATH/tron.py" ] || [ ! -f "$SRC_PATH/requirements.txt" ]; then
     echo "❌ 缺少必要文件，请检查以下位置："
-    echo "   需要: $SRC_PATH/jiutong.py"
+    echo "   需要: $SRC_PATH/tron.py"
     echo "   需要: $SRC_PATH/requirements.txt"
     echo ""
     echo "💡 运行方式："
@@ -202,7 +202,7 @@ echo "✅ 找到必要文件"
 # 创建项目目录
 echo "📁 创建项目目录..."
 sudo mkdir -p /opt/tron-collision
-sudo cp "$SRC_PATH/jiutong.py" "$SRC_PATH/requirements.txt" /opt/tron-collision/
+sudo cp "$SRC_PATH/tron.py" "$SRC_PATH/requirements.txt" /opt/tron-collision/
 
 # 创建虚拟环境
 echo "🐍 创建虚拟环境..."
@@ -263,7 +263,7 @@ Type=simple
 User=tron
 Group=tron
 WorkingDirectory=/opt/tron-collision
-ExecStart=/opt/tron-collision/venv/bin/python jiutong.py
+ExecStart=/opt/tron-collision/venv/bin/python tron.py
 Restart=always
 RestartSec=30
 
