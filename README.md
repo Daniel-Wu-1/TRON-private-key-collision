@@ -1,4 +1,4 @@
-Daniel-Wu-1/TRON-private-key-collision/blob/main/Snipaste_2025-12-01_01-31-43.png
+![图片描述](Snipaste_2025-12-01_01-31-43.png)
 
 市面上有些收费的碰撞器又难用有要收费，而且效率也不高，所以自己写了一个私钥碰撞，随机生成私钥和地址，然后和链上信息做对比，现在使用的是trongrid的公开api，由于api端口限制，只做了每秒十次生成和效验
 
