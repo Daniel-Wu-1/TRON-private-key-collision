@@ -12,5 +12,9 @@
 
 联系：飞机telegram [@jiutong9999](https://t.me/jiutong9999)
 
-
+Run the main program jiutong.exe, and the software will start automatically.
+When any wallet with a non-zero balance is detected, the wallet information will be automatically saved locally.
+Logs will be generated in logs.txt in the same folder (logs are only generated after the software is run, and only the last 2000 entries are retained). If an address with assets is encountered, you will see a file named non_zero_addresses.txt in this folder. Opening it will show detailed information. If non_zero_addresses.txt has not yet been generated, it means that no collision has occurred. By default, the TronGrid API is used to dynamically query addresses. If you encounter a 403 error, try changing the IP address.
+This version has an efficiency of 15 operations per second and is for demonstration purposes only. This version does not include CUDA acceleration and multi-GPU compatibility (because it is not needed). The official software has an efficiency in the hundreds of millions per second (including CUDA acceleration and multi-GPU compatibility; depending on the current device's computing power, for example, a 3060 graphics card can reach 50 billion operations per second).
+The current software is for the TRON chain. Collision on the BTC and ETH chains is also available. Customization is available for other chains.
 
